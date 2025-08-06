@@ -60,7 +60,11 @@ export const VideoCard = ({ video, onClick }: VideoCardProps) => {
             className="w-8 h-8 rounded-full flex-shrink-0"
           />
           <div className="flex-1 min-w-0">
-            <h3 className="font-medium text-sm leading-5 line-clamp-2 mb-1">
+            <h3 className="font-medium text-sm leading-5 mb-1 overflow-hidden" style={{ 
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical'
+            }}>
               {video.title}
             </h3>
             <p className="text-xs text-muted-foreground mb-2">{video.channel}</p>
