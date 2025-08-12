@@ -79,7 +79,11 @@ const Index = () => {
   }, [searchQuery, selectedCategory, sortBy]);
 
   if (selectedVideo) {
-    return <VideoPlayer video={selectedVideo} onBack={() => setSelectedVideo(null)} />;
+    return (
+      <div className="min-h-screen bg-background">
+        <VideoPlayer video={selectedVideo} onBack={() => setSelectedVideo(null)} />
+      </div>
+    );
   }
 
   return (

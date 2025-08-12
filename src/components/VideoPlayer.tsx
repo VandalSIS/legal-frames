@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ThumbsUp, ThumbsDown, Share, Download, Flag, Eye, Calendar } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { videos } from "@/data/videos";
 
 interface VideoPlayerProps {
   video: {
@@ -190,7 +191,7 @@ export const VideoPlayer = ({ video, onBack }: VideoPlayerProps) => {
                 <div 
                   key={relatedVideo.id} 
                   className="flex space-x-3 cursor-pointer hover:bg-muted/50 p-2 rounded"
-                  onClick={() => onBack() || setSelectedVideo(relatedVideo)}
+                  onClick={() => onBack() && setTimeout(() => setSelectedVideo(relatedVideo), 0)}
                 >
                   <div className="w-24 h-16 bg-muted rounded overflow-hidden flex-shrink-0">
                     <img 
