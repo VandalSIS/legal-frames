@@ -54,10 +54,15 @@ export const VideoPlayer = ({ video, onBack }: VideoPlayerProps) => {
           <div className="aspect-video bg-black rounded-lg overflow-hidden mb-4">
             {video.embedUrl ? (
               <iframe
+                width="560"
+                height="315"
                 src={video.embedUrl}
                 className="w-full h-full"
-                allowFullScreen
                 title={video.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-white">

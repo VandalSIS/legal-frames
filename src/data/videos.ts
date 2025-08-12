@@ -102,14 +102,56 @@ export const generateVideos = () => {
       category,
       description,
       tags: videoTags,
-      // Some videos have embed URLs (sample YouTube embeds for demo)
-      embedUrl: i % 10 === 0 ? `https://www.youtube.com/embed/dQw4w9WgXcQ?si=demo${i}` : undefined
+      // Real YouTube videos
+      embedUrl: i === 1 ? 'https://www.youtube.com/embed/0AT-PGwZI3w?si=D3Kcv75EeuVKehDn' :  // AFRO HOUSE MIX
+               i === 2 ? 'https://www.youtube.com/embed/2ECWX8GdDvA?si=2g4Nvy8e7Yy0HUsk' :   // Your second video
+               i === 3 ? 'https://www.youtube.com/embed/dQw4w9WgXcQ?si=2BANJczJnt8HLRkn' :   // Never Gonna Give You Up
+               i % 10 === 0 ? `https://www.youtube.com/embed/dQw4w9WgXcQ?si=demo${i}` : undefined,
+      
     };
     
     videos.push(video);
   }
   
-  return videos;
+  // Add the featured YouTube videos at the beginning
+  const featuredVideos = [
+    {
+      id: 'featured-1',
+      title: '(418) AFRO HOUSE MIX WITH: KABZA DE SMALL, MAJOR LEAGUE DJZ, UNCLE WAFFLES, DBN GOGO',
+      thumbnail: 'https://img.youtube.com/vi/0AT-PGwZI3w/maxresdefault.jpg',
+      duration: '1:00:00',
+      views: 2500000,
+      likes: 75000,
+      dislikes: 200,
+      uploadDate: new Date('2024-02-12'),
+      channel: 'Music Mix',
+      channelAvatar: '/placeholder.svg',
+      channelSubscribers: 1000000,
+      category: 'Music',
+      description: 'Enjoy this amazing AFRO HOUSE MIX featuring top artists like KABZA DE SMALL, MAJOR LEAGUE DJZ, UNCLE WAFFLES, and DBN GOGO.',
+      tags: ['afro house', 'music mix', 'kabza de small', 'major league djz'],
+      embedUrl: 'https://www.youtube.com/embed/0AT-PGwZI3w?si=D3Kcv75EeuVKehDn'
+    },
+    {
+      id: 'featured-2',
+      title: 'Never Gonna Give You Up',
+      thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+      duration: '3:33',
+      views: 1200000,
+      likes: 85000,
+      dislikes: 300,
+      uploadDate: new Date('2024-02-12'),
+      channel: 'Rick Astley',
+      channelAvatar: '/placeholder.svg',
+      channelSubscribers: 2000000,
+      category: 'Music',
+      description: 'The classic music video that started it all',
+      tags: ['music', 'classic', 'rick astley'],
+      embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ?si=2BANJczJnt8HLRkn'
+    }
+  ];
+
+  return [...featuredVideos, ...videos];
 };
 
 export const videos = generateVideos();
