@@ -172,24 +172,39 @@ export const VideoPlayer = ({ video, onBack }: VideoPlayerProps) => {
           </div>
         </div>
 
-        {/* Sidebar */}
+                  {/* Sidebar */}
         <div className="space-y-4">
           <Card>
             <CardHeader>
               <CardTitle>Related Videos</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="flex space-x-3 cursor-pointer hover:bg-muted/50 p-2 rounded">
+              {videos
+                .filter(v => 
+                  v.id !== video.id && // Don't show current video
+                  (v.category === video.category || // Same category
+                   v.tags.some(tag => video.tags.includes(tag))) // Has matching tags
+                )
+                .slice(0, 5) // Only show top 5 related videos
+                .map((relatedVideo) => (
+                <div 
+                  key={relatedVideo.id} 
+                  className="flex space-x-3 cursor-pointer hover:bg-muted/50 p-2 rounded"
+                  onClick={() => onBack() || setSelectedVideo(relatedVideo)}
+                >
                   <div className="w-24 h-16 bg-muted rounded overflow-hidden flex-shrink-0">
-                    <img src="/placeholder.svg" alt="Related video" className="w-full h-full object-cover" />
+                    <img 
+                      src={relatedVideo.thumbnail} 
+                      alt={relatedVideo.title} 
+                      className="w-full h-full object-cover" 
+                    />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h4 className="text-sm font-medium line-clamp-2 mb-1">
-                      Related Video Title {i + 1}
+                      {relatedVideo.title}
                     </h4>
-                    <p className="text-xs text-muted-foreground">Channel Name</p>
-                    <p className="text-xs text-muted-foreground">{formatViews(Math.floor(Math.random() * 1000000))} views</p>
+                    <p className="text-xs text-muted-foreground">{relatedVideo.channel}</p>
+                    <p className="text-xs text-muted-foreground">{formatViews(relatedVideo.views)} views</p>
                   </div>
                 </div>
               ))}

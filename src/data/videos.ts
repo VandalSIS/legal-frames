@@ -1,7 +1,7 @@
 // Generate 1000 sample videos with various categories
 const categories = [
   "Music", "Entertainment", "Gaming", "Education", "Technology", "Sports", 
-  "Travel", "Food", "Lifestyle", "Art", "Science", "News", "Comedy", "Documentary"
+  "Travel", "Food", "Lifestyle", "Art", "Science", "News", "Comedy", "Documentary","Amateur"
 ];
 
 const channels = [
@@ -76,48 +76,13 @@ const generateDate = () => {
   return new Date(randomTime);
 };
 
-// Generate 1000 videos
+// Generate videos list with real videos
 export const generateVideos = () => {
-  const videos = [];
-  
-  for (let i = 1; i <= 1000; i++) {
-    const category = categories[Math.floor(Math.random() * categories.length)];
-    const channel = channels[Math.floor(Math.random() * channels.length)];
-    const titleBase = videoTitles[Math.floor(Math.random() * videoTitles.length)];
-    const description = descriptions[Math.floor(Math.random() * descriptions.length)];
-    const videoTags = tags[Math.floor(Math.random() * tags.length)];
-    
-    const video = {
-      id: `video-${i}`,
-      title: `${titleBase} ${category === 'Music' ? '(Official Video)' : category === 'Gaming' ? '(Gameplay)' : category === 'Education' ? '(Tutorial)' : ''}`,
-      thumbnail: `/placeholder.svg`,
-      duration: generateDuration(),
-      views: Math.floor(Math.random() * 5000000) + 1000,
-      likes: Math.floor(Math.random() * 200000) + 100,
-      dislikes: Math.floor(Math.random() * 5000) + 10,
-      uploadDate: generateDate(),
-      channel: channel.name,
-      channelAvatar: channel.avatar,
-      channelSubscribers: channel.subscribers,
-      category,
-      description,
-      tags: videoTags,
-      // Real YouTube videos
-      embedUrl: i === 1 ? 'https://www.youtube.com/embed/0AT-PGwZI3w?si=D3Kcv75EeuVKehDn' :  // AFRO HOUSE MIX
-               i === 2 ? 'https://www.youtube.com/embed/2ECWX8GdDvA?si=2g4Nvy8e7Yy0HUsk' :   // Your second video
-               i === 3 ? 'https://www.youtube.com/embed/dQw4w9WgXcQ?si=2BANJczJnt8HLRkn' :   // Never Gonna Give You Up
-               i % 10 === 0 ? `https://www.youtube.com/embed/dQw4w9WgXcQ?si=demo${i}` : undefined,
-      
-    };
-    
-    videos.push(video);
-  }
-  
-  // Add the featured YouTube videos at the beginning
-  const featuredVideos = [
+  // List of real videos
+  const videos = [
     {
-      id: 'featured-1',
-      title: '(418) AFRO HOUSE MIX WITH: KABZA DE SMALL, MAJOR LEAGUE DJZ, UNCLE WAFFLES, DBN GOGO',
+      id: 'afro-house-1',
+      title: 'AFRO HOUSE MIX WITH: Keinamusik, HUGEL, Adam Port',
       thumbnail: 'https://img.youtube.com/vi/0AT-PGwZI3w/maxresdefault.jpg',
       duration: '1:00:00',
       views: 2500000,
@@ -128,14 +93,36 @@ export const generateVideos = () => {
       channelAvatar: '/placeholder.svg',
       channelSubscribers: 1000000,
       category: 'Music',
+      description: 'Sunset Set at NOBU Bangkok featuring the best Afro House tracks',
+      tags: ['afro house', 'music mix', 'keinamusik', 'hugel', 'adam port', 'sunset set'],
+      embedUrl: 'https://www.youtube.com/embed/0AT-PGwZI3w?si=D3Kcv75EeuVKehDn'
+    },
+    // Add more real videos here
+  ];
+
+  // Add the featured videos at the beginning
+  const featuredVideos = [
+    {
+      id: 'featured-1',
+      title: 'Busty girlfriend helped cum on her friend\'s ass',
+      thumbnail: 'https://pix-cdn77.phncdn.com/c6371/videos/202508/06/18352515/original_18352515.mp4/plain/ex:1:no/bg:0:0:0/rs:fit:320:180/vts:662?hash=pvGMuBH3yo-xRnD3z1v-CwHioLQ=&validto=4891363200',
+      duration: '00:15:00',
+      views: 2500000,
+      likes: 75000,
+      dislikes: 200,
+      uploadDate: new Date('2024-02-12'),
+      channel: 'Amateur',
+      channelAvatar: '/placeholder.svg',
+      channelSubscribers: 1000000,
+      category: 'Music',
       description: 'Enjoy this amazing AFRO HOUSE MIX featuring top artists like KABZA DE SMALL, MAJOR LEAGUE DJZ, UNCLE WAFFLES, and DBN GOGO.',
       tags: ['afro house', 'music mix', 'kabza de small', 'major league djz'],
-      embedUrl: 'https://www.youtube.com/embed/0AT-PGwZI3w?si=D3Kcv75EeuVKehDn'
+      embedUrl: 'https://www.pornhub.com/embed/6892ed7b9b471'
     },
     {
       id: 'featured-2',
-      title: 'Never Gonna Give You Up',
-      thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+      title: 'Hot Stepsis Silent Challenge — $1000 on the Line, But I Fucked the Moans Out of Her',
+      thumbnail: 'https://pix-cdn77.phncdn.com/c6251/videos/202507/24/17028735/original/01984101-8b41-7839-a127-4ec25b34cf2a.jpg/plain/rs:fit:320:180?hash=skOgRed5WWMFj1OdBmN4txKxvjQ=&validto=4891363200',
       duration: '3:33',
       views: 1200000,
       likes: 85000,
@@ -144,10 +131,10 @@ export const generateVideos = () => {
       channel: 'Rick Astley',
       channelAvatar: '/placeholder.svg',
       channelSubscribers: 2000000,
-      category: 'Music',
+      category: 'Amateur',
       description: 'The classic music video that started it all',
       tags: ['music', 'classic', 'rick astley'],
-      embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ?si=2BANJczJnt8HLRkn'
+      embedUrl: 'https://www.pornhub.com/embed/67e59752d2b98'
     }
   ];
 
@@ -155,3 +142,5 @@ export const generateVideos = () => {
 };
 
 export const videos = generateVideos();
+
+
