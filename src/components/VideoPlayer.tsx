@@ -81,6 +81,7 @@ export const VideoPlayer = ({ video, onBack, setSelectedVideo }: VideoPlayerProp
           <div className="space-y-4">
             <div>
               <h1 className="text-2xl font-bold mb-2">{video.title}</h1>
+              <h2 className="text-lg text-muted-foreground mb-2">{video.description}</h2>
               <div className="flex flex-wrap items-center gap-2 mb-4">
                 {video.tags.map((tag) => (
                   <Badge key={tag} variant="outline" className="text-xs">

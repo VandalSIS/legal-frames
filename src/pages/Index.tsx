@@ -7,8 +7,12 @@ import { VideoCard } from "@/components/VideoCard";
 import { VideoPlayer } from "@/components/VideoPlayer";
 import { videos } from "@/data/videos";
 import { Search, Filter, TrendingUp, Clock, Eye, ThumbsUp, Grid, List } from "lucide-react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 const Index = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const location = useLocation();
   const [selectedVideo, setSelectedVideo] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -16,6 +20,93 @@ const Index = () => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [currentPage, setCurrentPage] = useState(1);
   const videosPerPage = 24;
+
+  // Handle video selection with routing
+  const handleVideoSelect = (video: any) => {
+    setSelectedVideo(video);
+    navigate(`/video/${video.id}`, { replace: true });
+    window.scrollTo(0, 0);
+  };
+
+  // Handle back button
+  const handleBack = () => {
+    setSelectedVideo(null);
+    navigate("/", { replace: true });
+  };
+
+  // Load video from URL
+  useEffect(() => {
+    if (id) {
+      const video = videos.find(v => v.id === id);
+      if (video) {
+        setSelectedVideo(video);
+      }
+    } else {
+      setSelectedVideo(null);
+    }
+  }, [id]);
+
+  // Update document title and meta tags
+  useEffect(() => {
+    if (selectedVideo) {
+      // For video pages
+      document.title = `${selectedVideo.title} - VideoHub`;
+      
+      // Update meta description
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) {
+        metaDescription.setAttribute("content", `Watch ${selectedVideo.title} by ${selectedVideo.channel}. ${selectedVideo.description}`);
+      }
+      
+      // Update keywords
+      const metaKeywords = document.querySelector('meta[name="keywords"]');
+      if (metaKeywords) {
+        metaKeywords.setAttribute("content", `${selectedVideo.tags.join(", ")}, ${selectedVideo.category}, ${selectedVideo.channel}`);
+      }
+
+      // Update OpenGraph tags
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      const ogDesc = document.querySelector('meta[property="og:description"]');
+      const ogImage = document.querySelector('meta[property="og:image"]');
+      const ogUrl = document.querySelector('meta[property="og:url"]');
+
+      if (ogTitle) ogTitle.setAttribute("content", `${selectedVideo.title} - VideoHub`);
+      if (ogDesc) ogDesc.setAttribute("content", `Watch ${selectedVideo.title} by ${selectedVideo.channel}. ${selectedVideo.description}`);
+      if (ogImage) ogImage.setAttribute("content", selectedVideo.thumbnail);
+      if (ogUrl) ogUrl.setAttribute("content", `${window.location.origin}/video/${selectedVideo.id}`);
+
+      // Update Twitter tags
+      const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+      const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+      const twitterImage = document.querySelector('meta[name="twitter:image"]');
+
+      if (twitterTitle) twitterTitle.setAttribute("content", `${selectedVideo.title} - VideoHub`);
+      if (twitterDesc) twitterDesc.setAttribute("content", `Watch ${selectedVideo.title} by ${selectedVideo.channel}. ${selectedVideo.description}`);
+      if (twitterImage) twitterImage.setAttribute("content", selectedVideo.thumbnail);
+    } else {
+      // For home page
+      document.title = "VideoHub - Watch Amazing Videos";
+      
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) {
+        metaDescription.setAttribute("content", "Discover and watch amazing videos on VideoHub. Find music videos, entertainment, gaming content, and more. High-quality streaming platform for all your video needs.");
+      }
+      
+      const metaKeywords = document.querySelector('meta[name="keywords"]');
+      if (metaKeywords) {
+        metaKeywords.setAttribute("content", "video platform, music videos, entertainment, gaming videos, streaming, online videos, video sharing");
+      }
+
+      // Update OpenGraph tags for homepage
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      const ogDesc = document.querySelector('meta[property="og:description"]');
+      const ogUrl = document.querySelector('meta[property="og:url"]');
+
+      if (ogTitle) ogTitle.setAttribute("content", "VideoHub - Watch Amazing Videos");
+      if (ogDesc) ogDesc.setAttribute("content", "Discover and watch amazing videos on VideoHub. High-quality streaming platform for all your video needs.");
+      if (ogUrl) ogUrl.setAttribute("content", window.location.origin);
+    }
+  }, [selectedVideo]);
 
   // Get unique categories
   const categories = useMemo(() => {
@@ -81,8 +172,8 @@ const Index = () => {
   if (selectedVideo) {
     return <VideoPlayer 
       video={selectedVideo} 
-      onBack={() => setSelectedVideo(null)} 
-      setSelectedVideo={setSelectedVideo}
+      onBack={handleBack}
+      setSelectedVideo={handleVideoSelect}
     />;
   }
 
