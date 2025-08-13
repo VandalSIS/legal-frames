@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -25,7 +25,7 @@ interface VideoPlayerProps {
     embedUrl?: string;
   };
   onBack: () => void;
-  setSelectedVideo?: (video: any) => void;
+  setSelectedVideo?: (video: VideoPlayerProps['video']) => void;
 }
 
 export const VideoPlayer = ({ video, onBack, setSelectedVideo }: VideoPlayerProps) => {
@@ -43,6 +43,73 @@ export const VideoPlayer = ({ video, onBack, setSelectedVideo }: VideoPlayerProp
     if (subs >= 1000) return `${(subs / 1000).toFixed(1)}K`;
     return subs.toString();
   };
+
+  useEffect(() => {
+    try {
+      // Update meta tags for this specific video
+      document.title = `${video.title} - VideoHub`;
+    
+    // Update meta description
+    const metaDesc = document.querySelector('meta[name="description"]') as HTMLMetaElement;
+    if (metaDesc) {
+      metaDesc.setAttribute("content", `Watch ${video.title} by ${video.channel}. ${video.description}`);
+    }
+
+    // Update keywords
+    const metaKeywords = document.querySelector('meta[name="keywords"]') as HTMLMetaElement;
+    if (metaKeywords) {
+      const keywords = [
+        video.title,
+        video.channel,
+        video.category,
+        ...video.tags,
+        'music mix',
+        'afro house',
+        'sunset set',
+        'nobu bangkok'
+      ].join(', ');
+      metaKeywords.setAttribute("content", keywords);
+    }
+
+    // Update OpenGraph
+    const ogTitle = document.querySelector('meta[property="og:title"]') as HTMLMetaElement;
+    const ogDesc = document.querySelector('meta[property="og:description"]') as HTMLMetaElement;
+    const ogImage = document.querySelector('meta[property="og:image"]') as HTMLMetaElement;
+    const ogUrl = document.querySelector('meta[property="og:url"]') as HTMLMetaElement;
+
+    if (ogTitle) ogTitle.setAttribute("content", `${video.title} - VideoHub`);
+    if (ogDesc) ogDesc.setAttribute("content", `${video.description}`);
+    if (ogImage) ogImage.setAttribute("content", video.thumbnail);
+    if (ogUrl) ogUrl.setAttribute("content", window.location.href);
+
+    // Add schema markup for video
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "VideoObject",
+      "name": video.title,
+      "description": video.description,
+      "thumbnailUrl": video.thumbnail,
+      "uploadDate": video.uploadDate,
+      "duration": video.duration,
+      "interactionStatistic": {
+        "@type": "InteractionCounter",
+        "interactionType": { "@type": "WatchAction" },
+        "userInteractionCount": video.views
+      }
+    };
+
+    let scriptTag = document.querySelector('#videoSchema') as HTMLScriptElement;
+    if (!scriptTag) {
+      scriptTag = document.createElement('script');
+      scriptTag.id = 'videoSchema';
+      scriptTag.type = 'application/ld+json';
+      document.head.appendChild(scriptTag);
+    }
+    scriptTag.textContent = JSON.stringify(schema);
+    } catch (error) {
+      console.error('Error updating meta tags:', error);
+    }
+  }, [video.title, video.description, video.channel, video.thumbnail, video.tags, video.category, video.views]);
 
   return (
     <div className="max-w-6xl mx-auto p-4">
@@ -80,15 +147,31 @@ export const VideoPlayer = ({ video, onBack, setSelectedVideo }: VideoPlayerProp
           {/* Video Info */}
           <div className="space-y-4">
             <div>
-              <h1 className="text-2xl font-bold mb-2">{video.title}</h1>
-              <h2 className="text-lg text-muted-foreground mb-2">{video.description}</h2>
+              <h1 className="text-3xl font-bold mb-3">{video.title}</h1>
+              <h2 className="text-xl text-muted-foreground mb-4">{video.description}</h2>
+              
+              {/* Keywords/Tags */}
               <div className="flex flex-wrap items-center gap-2 mb-4">
+                <Badge variant="secondary" className="text-sm font-semibold">
+                  {video.category}
+                </Badge>
                 {video.tags.map((tag) => (
-                  <Badge key={tag} variant="outline" className="text-xs">
+                  <Badge key={tag} variant="outline" className="text-sm">
                     #{tag}
                   </Badge>
                 ))}
+                <Badge variant="outline" className="text-sm">
+                  #sunset_set
+                </Badge>
+                <Badge variant="outline" className="text-sm">
+                  #nobu_bangkok
+                </Badge>
               </div>
+
+              {/* Location Info */}
+              <p className="text-sm text-muted-foreground mb-4">
+                Recorded at NOBU Bangkok • Sunset Set
+              </p>
             </div>
 
             <div className="flex items-center justify-between flex-wrap gap-4">
@@ -175,7 +258,7 @@ export const VideoPlayer = ({ video, onBack, setSelectedVideo }: VideoPlayerProp
           </div>
         </div>
 
-                  {/* Sidebar */}
+        {/* Sidebar */}
         <div className="space-y-4">
           <Card>
             <CardHeader>
@@ -194,8 +277,8 @@ export const VideoPlayer = ({ video, onBack, setSelectedVideo }: VideoPlayerProp
                   key={relatedVideo.id} 
                   className="flex space-x-3 cursor-pointer hover:bg-muted/50 p-2 rounded"
                   onClick={() => {
-                    if (typeof window !== 'undefined') {
-                      window.scrollTo(0, 0);
+                    window.scrollTo(0, 0);
+                    if (setSelectedVideo) {
                       setSelectedVideo(relatedVideo);
                     }
                   }}
