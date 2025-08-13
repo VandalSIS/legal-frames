@@ -25,9 +25,10 @@ interface VideoPlayerProps {
     embedUrl?: string;
   };
   onBack: () => void;
+  setSelectedVideo?: (video: any) => void;
 }
 
-export const VideoPlayer = ({ video, onBack }: VideoPlayerProps) => {
+export const VideoPlayer = ({ video, onBack, setSelectedVideo }: VideoPlayerProps) => {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
 
@@ -191,7 +192,12 @@ export const VideoPlayer = ({ video, onBack }: VideoPlayerProps) => {
                 <div 
                   key={relatedVideo.id} 
                   className="flex space-x-3 cursor-pointer hover:bg-muted/50 p-2 rounded"
-                  onClick={() => onBack() && setTimeout(() => setSelectedVideo(relatedVideo), 0)}
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      window.scrollTo(0, 0);
+                      setSelectedVideo(relatedVideo);
+                    }
+                  }}
                 >
                   <div className="w-24 h-16 bg-muted rounded overflow-hidden flex-shrink-0">
                     <img 
